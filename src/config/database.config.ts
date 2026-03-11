@@ -4,14 +4,17 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 export default registerAs('database', (): TypeOrmModuleOptions => {
   const isProduction = process.env.NODE_ENV === 'production';
   const databaseUrl = process.env.DATABASE_URL;
+  const shouldSynchronize =
+    process.env.DB_SYNCHRONIZE === 'true' || !isProduction;
 
   const baseConfig: TypeOrmModuleOptions = {
     type: 'postgres',
     // Entities are auto-loaded from the dist folder
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-    // In development: auto-creates/updates tables from entities.
-    // MUST be false in production (use migrations instead).
-    synchronize: !isProduction,
+    // In development it stays on by default.
+    // In Render we can enable it explicitly with DB_SYNCHRONIZE=true
+    // until proper migrations are added.
+    synchronize: shouldSynchronize,
     ssl: isProduction ? { rejectUnauthorized: false } : false,
   };
 
