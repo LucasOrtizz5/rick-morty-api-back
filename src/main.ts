@@ -7,11 +7,11 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Parse cookies so httpOnly JWT cookie is accessible in controllers/strategies
+  // Parsea las cookies para que la cookie JWT httpOnly sea accesible en controladores y estrategias.
   app.use(cookieParser());
 
-  // CORS: allow the Angular frontend (Vercel) to send credentials (cookies).
-  // In production, CORS_ORIGIN must be set to the actual Vercel deployment URL.
+  // CORS: permite que el frontend Angular (Vercel) envíe credenciales (cookies).
+  // En producción, CORS_ORIGIN debe apuntar a la URL real del deploy en Vercel.
   app.enableCors({
     origin: process.env.CORS_ORIGIN ?? 'http://localhost:4200',
     credentials: true,
@@ -19,9 +19,9 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
-  // Global validation pipe: automatically validates all incoming DTOs using class-validator.
-  // whitelist: true strips any properties not defined in the DTO (security).
-  // forbidNonWhitelisted: true throws an error if unknown properties are sent.
+  // Pipe global de validación: valida automáticamente todos los DTO de entrada con class-validator.
+  // whitelist: true elimina propiedades no definidas en el DTO por seguridad.
+  // forbidNonWhitelisted: true lanza un error si se envían propiedades desconocidas.
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -30,7 +30,7 @@ async function bootstrap() {
     }),
   );
 
-  // Global exception filter: normalizes all errors to { header: { resultCode, error } }
+  // Filtro global de excepciones: normaliza todos los errores al formato { header: { resultCode, error } }.
   app.useGlobalFilters(new HttpExceptionFilter());
 
   const port = process.env.PORT ?? 3000;

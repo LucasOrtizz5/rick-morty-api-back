@@ -9,17 +9,17 @@ export default registerAs('database', (): TypeOrmModuleOptions => {
 
   const baseConfig: TypeOrmModuleOptions = {
     type: 'postgres',
-    // Entities are auto-loaded from the dist folder
+    // Las entidades se cargan automáticamente desde la carpeta dist.
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-    // In development it stays on by default.
-    // In Render we can enable it explicitly with DB_SYNCHRONIZE=true
-    // until proper migrations are added.
+    // En desarrollo queda activado por defecto.
+    // En Render se puede habilitar explícitamente con DB_SYNCHRONIZE=true
+    // hasta que se agreguen migraciones formales.
     synchronize: shouldSynchronize,
     ssl: isProduction ? { rejectUnauthorized: false } : false,
   };
 
-  // Render can provide a single DATABASE_URL. If it's present,
-  // we prefer it over individual DATABASE_* variables.
+  // Render puede entregar una sola DATABASE_URL. Si existe,
+  // se prioriza sobre las variables individuales DATABASE_*.
   if (databaseUrl) {
     return {
       ...baseConfig,

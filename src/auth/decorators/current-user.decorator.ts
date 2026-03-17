@@ -1,7 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { User } from '../../users/entities/user.entity';
 
-// Usage in controller:
+// Uso en un controlador:
 //   @Get('me')
 //   @UseGuards(JwtAuthGuard)
 //   getMe(@CurrentUser() user: User) { ... }

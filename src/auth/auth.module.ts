@@ -10,13 +10,13 @@ import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
-    // Import UsersModule to access UsersService
+    // Importa UsersModule para poder usar UsersService.
     UsersModule,
 
-    // Register Passport with 'jwt' as the default strategy
+    // Registra Passport usando 'jwt' como estrategia por defecto.
     PassportModule.register({ defaultStrategy: 'jwt' }),
 
-    // Register JwtModule asynchronously so it can read the secret from ConfigService
+    // Registra JwtModule de forma asíncrona para leer el secreto desde ConfigService.
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

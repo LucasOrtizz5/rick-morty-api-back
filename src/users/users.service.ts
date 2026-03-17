@@ -11,7 +11,7 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  // Used by AuthService during registration.
+  // Lo usa AuthService durante el registro.
   async create(registerDto: RegisterDto): Promise<User> {
     const existingUser = await this.findByEmail(registerDto.email);
     if (existingUser) {
@@ -22,13 +22,13 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  // Used by JwtStrategy to validate the token payload.
+  // Lo usa JwtStrategy para validar el payload del token.
   async findById(id: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { id } });
   }
 
-  // Used by AuthService during login. Explicitly selects 'password'
-  // because the column has select: false on the entity.
+  // Lo usa AuthService durante el login. Selecciona explícitamente 'password'
+  // porque la columna tiene select: false en la entidad.
   async findByEmailWithPassword(email: string): Promise<User | null> {
     return this.usersRepository
       .createQueryBuilder('user')
@@ -37,7 +37,7 @@ export class UsersService {
       .getOne();
   }
 
-  // Used to check email uniqueness without fetching the password.
+  // Se usa para validar unicidad del email sin traer la contraseña.
   async findByEmail(email: string): Promise<User | null> {
     return this.usersRepository.findOne({ where: { email } });
   }

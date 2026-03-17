@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-// Shorthand guard that triggers the 'jwt' Passport strategy.
-// Apply this to any route that requires authentication:
+// Guard abreviado que ejecuta la estrategia 'jwt' de Passport.
+// Úsalo en cualquier ruta que requiera autenticación:
 //   @UseGuards(JwtAuthGuard)
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {}

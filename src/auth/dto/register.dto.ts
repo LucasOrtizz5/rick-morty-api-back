@@ -17,7 +17,7 @@ export class RegisterDto {
   @IsNotEmpty()
   email: string;
 
-  // At least 6 characters, one uppercase letter, one number
+  // Al menos 6 caracteres, una mayúscula y un número.
   @IsString()
   @MinLength(6)
   @Matches(/^(?=.*[A-Z])(?=.*\d).+$/, {

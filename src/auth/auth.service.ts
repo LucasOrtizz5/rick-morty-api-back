@@ -29,7 +29,7 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto): Promise<AuthUserResponse> {
-    // UsersService.create handles duplicate email check and bcrypt hashing via @BeforeInsert
+    // UsersService.create resuelve la validación de email duplicado y el hash con bcrypt vía @BeforeInsert.
     const user = await this.usersService.create(registerDto);
 
     return {
@@ -47,7 +47,7 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto): Promise<{ accessToken: string }> {
-    // Fetch user WITH password (the column has select: false, so we use the special method)
+    // Busca al usuario CON password; como la columna tiene select: false, se usa el método especial.
     const user = await this.usersService.findByEmailWithPassword(
       loginDto.email,
     );

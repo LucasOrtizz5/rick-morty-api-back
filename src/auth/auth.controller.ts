@@ -42,14 +42,14 @@ export class AuthController {
     const { accessToken } = await this.authService.login(loginDto);
     const isProduction = this.configService.get('NODE_ENV') === 'production';
 
-    // Set the JWT in a httpOnly cookie so JavaScript cannot read it (XSS protection).
-    // sameSite: 'none' + secure: true is required for cross-origin requests
-    // (Vercel frontend → Render backend).
+    // Guarda el JWT en una cookie httpOnly para que JavaScript no pueda leerlo (protección contra XSS).
+    // sameSite: 'none' + secure: true es necesario en requests cross-origin
+    // (frontend en Vercel -> backend en Render).
     res.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? 'none' : 'lax',
-      maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
+      maxAge: 60 * 60 * 1000, // 1 hora en milisegundos.
     });
 
     return { header: { resultCode: 0 } };

@@ -24,7 +24,7 @@ export class User {
   @Column({ length: 255, unique: true })
   email: string;
 
-  // The password is hashed via @BeforeInsert. It is never stored in plain text.
+  // La contraseña se hashea mediante @BeforeInsert. Nunca se guarda en texto plano.
   @Column({ length: 255, select: false })
   password: string;
 
@@ -49,7 +49,7 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // Automatically hash the password before inserting a new user into the database.
+  // Hashea automáticamente la contraseña antes de insertar un usuario nuevo en la base de datos.
   @BeforeInsert()
   async hashPassword(): Promise<void> {
     const saltRounds = 10;

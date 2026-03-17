@@ -27,7 +27,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         exceptionResponse !== null
       ) {
         const res = exceptionResponse as Record<string, unknown>;
-        // class-validator sends an array of messages; join them for readability
+        // class-validator envía un arreglo de mensajes; se unen para mejorar la legibilidad.
         if (Array.isArray(res['message'])) {
           errorMessage = (res['message'] as string[]).join(', ');
         } else if (typeof res['message'] === 'string') {

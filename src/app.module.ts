@@ -7,15 +7,15 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    // Makes .env variables available throughout the whole app via ConfigService.
-    // isGlobal: true means we don't need to re-import ConfigModule in every module.
+    // Hace que las variables de .env estén disponibles en toda la app mediante ConfigService.
+    // isGlobal: true evita tener que reimportar ConfigModule en cada módulo.
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig],
       envFilePath: '.env',
     }),
 
-    // TypeORM reads its config from the 'database' namespace registered above.
+    // TypeORM toma su configuración del namespace 'database' registrado arriba.
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => config.get('database')!,

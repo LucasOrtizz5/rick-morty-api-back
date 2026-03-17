@@ -7,7 +7,7 @@ import { UsersService } from '../../users/users.service';
 import { User } from '../../users/entities/user.entity';
 
 export interface JwtPayload {
-  sub: string; // user UUID
+  sub: string; // UUID del usuario.
   email: string;
   role: string;
 }
@@ -30,15 +30,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly usersService: UsersService,
   ) {
     super({
-      // Extract JWT from the httpOnly cookie named 'access_token'
+      // Extrae el JWT desde la cookie httpOnly llamada 'access_token'.
       jwtFromRequest: ExtractJwt.fromExtractors([extractAccessToken]),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('JWT_SECRET')!,
     });
   }
 
-  // Called automatically by Passport after verifying the token signature.
-  // The return value is attached to req.user.
+  // Passport llama a este método automáticamente después de verificar la firma del token.
+  // El valor retornado se adjunta en req.user.
   async validate(payload: JwtPayload): Promise<User> {
     const user = await this.usersService.findById(payload.sub);
     if (!user) {

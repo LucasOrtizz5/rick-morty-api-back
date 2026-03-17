@@ -5,11 +5,11 @@ import { UsersService } from './users.service';
 
 @Module({
   imports: [
-    // Registers the User repository so it can be injected with @InjectRepository(User)
+    // Registra el repositorio de User para poder inyectarlo con @InjectRepository(User).
     TypeOrmModule.forFeature([User]),
   ],
   providers: [UsersService],
-  // Export UsersService so other modules (AuthModule, future FavoritesModule) can use it
+  // Exporta UsersService para que otros módulos (AuthModule, un futuro FavoritesModule) puedan usarlo.
   exports: [UsersService],
 })
 export class UsersModule {}
