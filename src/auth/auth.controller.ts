@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
+  Headers,
   HttpCode,
   HttpStatus,
   Post,
@@ -13,6 +15,7 @@ import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { BootstrapAdminDto } from './dto/bootstrap-admin.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
@@ -65,6 +68,35 @@ export class AuthController {
       sameSite: isProduction ? 'none' : 'lax',
     });
     return { header: { resultCode: 0 } };
+  }
+
+  @Post('bootstrap-admin')
+  @HttpCode(HttpStatus.OK)
+  async bootstrapAdmin(
+    @Body() dto: BootstrapAdminDto,
+    @Headers('x-bootstrap-secret') bootstrapSecret: string | undefined,
+  ) {
+    const configuredSecret = this.configService.get<string>('BOOTSTRAP_ADMIN_SECRET');
+
+    if (!configuredSecret) {
+      throw new ForbiddenException('Bootstrap admin endpoint is disabled');
+    }
+
+    if (!bootstrapSecret || bootstrapSecret !== configuredSecret) {
+      throw new ForbiddenException('Invalid bootstrap secret');
+    }
+
+    const user = await this.authService.bootstrapFirstAdmin(dto.email);
+
+    return {
+      header: { resultCode: 0 },
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    };
   }
 
   @Get('me')

@@ -11,11 +11,11 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  name: string;
+  name!: string;
 
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   // Al menos 6 caracteres, una mayúscula y un número.
   @IsString()
@@ -24,25 +24,25 @@ export class RegisterDto {
     message:
       'Password must contain at least one uppercase letter and one number',
   })
-  password: string;
+  password!: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  address: string;
+  address!: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  city: string;
+  city!: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  country: string;
+  country!: string;
 
   @IsString()
   @IsNotEmpty()
   @Matches(/^\d{4,10}$/, { message: 'Zip must be between 4 and 10 digits' })
-  zip: string;
+  zip!: string;
 }

@@ -1,10 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { User } from '../users/entities/user.entity';
+import { User, UserRole } from '../users/entities/user.entity';
 import { JwtPayload } from './strategies/jwt.strategy';
 
 type AuthUserResponse = Pick<
@@ -17,6 +17,9 @@ type AuthUserResponse = Pick<
   | 'country'
   | 'zip'
   | 'role'
+  | 'nickname'
+  | 'birthDate'
+  | 'profileImageUrl'
   | 'createdAt'
   | 'updatedAt'
 >;
@@ -41,6 +44,9 @@ export class AuthService {
       country: user.country,
       zip: user.zip,
       role: user.role,
+      nickname: user.nickname,
+      birthDate: user.birthDate,
+      profileImageUrl: user.profileImageUrl,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
@@ -72,5 +78,31 @@ export class AuthService {
 
     const accessToken = this.jwtService.sign(payload);
     return { accessToken };
+  }
+
+  async bootstrapFirstAdmin(email: string): Promise<AuthUserResponse> {
+    const existingAdmins = await this.usersService.countByRole(UserRole.ADMIN);
+
+    if (existingAdmins > 0) {
+      throw new ConflictException('An admin user already exists');
+    }
+
+    const user = await this.usersService.updateRoleByEmail(email, UserRole.ADMIN);
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      address: user.address,
+      city: user.city,
+      country: user.country,
+      zip: user.zip,
+      role: user.role,
+      nickname: user.nickname,
+      birthDate: user.birthDate,
+      profileImageUrl: user.profileImageUrl,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
   }
 }
